@@ -22,7 +22,6 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % CatsVersion,
   "org.sangria-graphql" %% "sangria" % SangriaVersion,
   "org.sangria-graphql" %% "sangria-circe" % SangriaCirceVersion,
-  // "ch.qos.logback" % "logback-classic" % "1.2.3",
   //  "io.circe" %% "circe-optics" % "0.9.3",
   "org.http4s" %% "http4s-blaze-server" % Http4sVersion,
   //"org.http4s"      %% "http4s-blaze-client" % Http4sVersion,
