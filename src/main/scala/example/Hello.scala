@@ -1,5 +1,3 @@
 package example
 
-object Hello extends App {
-
-}
+object Hello extends App {}
