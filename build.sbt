@@ -9,6 +9,8 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 val CatsVersion = "1.6.1"
 val Http4sVersion = "0.20.1"
 val CirceVersion = "0.11.1"
+val CirceOpticsVersion = "0.9.3"
+val CirceConfigVersion = "0.6.1"
 //val Specs2Version = "4.1.0"
 val LogbackVersion = "1.2.3"
 
@@ -22,17 +24,18 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % CatsVersion,
   "org.sangria-graphql" %% "sangria" % SangriaVersion,
   "org.sangria-graphql" %% "sangria-circe" % SangriaCirceVersion,
-  //  "io.circe" %% "circe-optics" % "0.9.3",
   "org.http4s" %% "http4s-blaze-server" % Http4sVersion,
   //"org.http4s"      %% "http4s-blaze-client" % Http4sVersion,
   "org.http4s" %% "http4s-circe" % Http4sVersion,
   "org.http4s" %% "http4s-dsl" % Http4sVersion,
   "io.circe" %% "circe-generic" % CirceVersion,
+  "io.circe" %% "circe-config" % CirceConfigVersion,
+  "io.circe" %% "circe-optics" % CirceOpticsVersion,
+
   //"org.specs2"      %% "specs2-core"         % Specs2Version % "test",
   "ch.qos.logback" % "logback-classic" % LogbackVersion,
-  "org.scalatest" %% "scalatest" % ScalaTestVersion % Test,
+  "org.scalatest" %% "scalatest" % ScalaTestVersion % Test
 
-  "io.circe" %% "circe-optics" % "0.9.3" // Http4sServer
 )
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % KindProjectorVersion cross CrossVersion.binary)

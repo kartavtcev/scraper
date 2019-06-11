@@ -9,7 +9,8 @@ import org.http4s.server.blaze.BlazeServerBuilder
 
 import scala.concurrent.ExecutionContext
 
-// TODO: config, db later - hardcode now & check that sangria works...
+// TODO: config, db, not a hardcoded test data
+// TODO: logging
 
 object Server extends IOApp {
   def createInfractructure[F[_] : ContextShift : ConcurrentEffect : Timer] : NewsService[F] = {

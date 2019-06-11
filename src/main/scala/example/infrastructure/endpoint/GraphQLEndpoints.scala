@@ -28,6 +28,7 @@ import example.domain.News.NewsService
 
 // TODO: Auth
 object GraphQLEndpoints {
+  // TODO: blocking # to config
   val blockingEc = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(4))
 
   def graphQLEndpoint(newsService: NewsService[IO])(implicit ec: ExecutionContext, cs: ContextShift[IO]) = {

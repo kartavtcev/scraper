@@ -6,7 +6,7 @@ import sangria.schema._
 
 object SchemaDefinition {
 
-  // Might define with macros yet Scala 3
+  // Might define with macros yet Scala 3 ...
   // TODO: auth; DELAY
   val news =
     List(
