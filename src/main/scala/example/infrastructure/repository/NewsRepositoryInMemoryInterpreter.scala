@@ -12,11 +12,11 @@ class NewsRepositoryInMemoryInterpreter[F[_]: Applicative] extends NewsRepositor
   // test data setup:
   val link1 = "https://www.wsj.com/articles/acting-budget-chief-seeks-reprieve-on-huawei-ban-11560108418"
   cache += (link1 ->
-    NewsItem(link1, "Acting Budget Chief Seeks Reprieve on Huawei Ban"))
+    NewsItem("Acting Budget Chief Seeks Reprieve on Huawei Ban", link1))
 
   val link2 = "https://www.wsj.com/articles/rewrite-of-bank-rules-bogs-down-11560159001"
   cache += (link2 ->
-    NewsItem(link2, "Rewrite of Bank Rules Makes Little Progress, Frustrating Republicans"))
+    NewsItem("Rewrite of Bank Rules Makes Little Progress, Frustrating Republicans", link2))
 
   def create(newsItem: NewsItem): F[Unit] = {
     cache += (newsItem.link -> newsItem)
