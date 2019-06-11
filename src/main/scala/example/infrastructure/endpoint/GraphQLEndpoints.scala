@@ -12,6 +12,8 @@ import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.io._
 import org.http4s.server.Router
+import org.http4s.implicits._
+
 import sangria.ast.Document
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
@@ -21,8 +23,10 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
+
 import example.domain.News.NewsService
 
+// TODO: Auth
 object GraphQLEndpoints {
   val blockingEc = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(4))
 
@@ -56,7 +60,7 @@ object GraphQLEndpoints {
         }
     }
 
-    Router("/" -> routes)
+    Router("/" -> routes).orNotFound
   }
 
   def executeGraphQL(newsService: NewsService[IO])(query: Document, operationName: Option[String], variables: Json)(
