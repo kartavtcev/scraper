@@ -1,49 +1,39 @@
 package example.infrastructure.endpoint
 
-import cats.data.Validated.Valid
-import cats.data._
-import cats.effect.{ContextShift, IO, Sync}
-import example.domain.News.NewsService
-import io.circe.generic.auto._
-import io.circe.syntax._
-import org.http4s._
-import org.http4s.Message._
-import org.http4s.dsl.io._
-import org.http4s.server.blaze._
-import org.http4s.circe._
-import org.http4s.dsl.Http4sDsl
-import sangria.ast.Document
-import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
-import sangria.parser.{QueryParser, SyntaxError}
 import java.util.concurrent._
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
-import scala.util.control.NonFatal
+import cats.data._
+import cats.effect.{ContextShift, IO}
+import cats.implicits._
 import io.circe.Json
 import io.circe.jawn._
 import io.circe.optics.JsonPath._
+import org.http4s._
+import org.http4s.circe._
+import org.http4s.dsl.Http4sDsl
 import org.http4s.server.Router
+import sangria.ast.Document
+import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
+import sangria.parser.{QueryParser, SyntaxError}
 
-import cats.implicits._
-import org.http4s.implicits._
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
+import scala.util.{Failure, Success}
 
-class GraphQLEndpoints[F[_]: Sync](implicit F: ContextShift[F]) extends Http4sDsl[F] {
+import example.domain.News.NewsService
+
+object GraphQLEndpoints extends Http4sDsl[IO] {
   val blockingEc = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(4))
-  implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
-  def graphQLEndpoint(newsService: NewsService[IO]) = {
+  def graphQLEndpoint(newsService: NewsService[IO])(implicit ec: ExecutionContext, cs: ContextShift[IO]) = {
 
-    def routes1[F[_]] = HttpRoutes.of[F] {
+    def routes = HttpRoutes.of[IO] {
       case request @ GET -> Root ⇒ {
-        val route: OptionT[F, Response[F]] = StaticFile.fromResource("/assets/graphiql.html", blockingEc, Some(request))
-        val result: F[Response[F]] = route.getOrElseF(NotFound())
+        val route: OptionT[IO, Response[IO]] = StaticFile.fromResource("/assets/graphiql.html", blockingEc, Some(request))
+        val result: IO[Response[IO]] = route.getOrElseF(NotFound())
         result
       }
-    }
-
-    val routes2 = HttpRoutes.of[IO] {
 
       case request @ POST -> Root / "graphql" ⇒
         request.as[Json].flatMap { body ⇒
@@ -66,12 +56,11 @@ class GraphQLEndpoints[F[_]: Sync](implicit F: ContextShift[F]) extends Http4sDs
         }
     }
 
-    val routes: HttpRoutes[IO] = routes1[IO] <+> routes2
-
     Router("/" -> routes)
   }
 
-  def executeGraphQL(newsService: NewsService[IO])(query: Document, operationName: Option[String], variables: Json) =
+  def executeGraphQL(newsService: NewsService[IO])(query: Document, operationName: Option[String], variables: Json)(
+      implicit ec: ExecutionContext) =
     GraphQLUtil
       .executeGraphQL(newsService)(query, operationName, variables)
       .map(Ok(_))
@@ -97,17 +86,4 @@ class GraphQLEndpoints[F[_]: Sync](implicit F: ContextShift[F]) extends Http4sDs
 
   def formatError(message: String): Json =
     Json.obj("errors" → Json.arr(Json.obj("message" → Json.fromString(message))))
-  /*
-  def start() = {
-    BlazeBuilder[IO].bindHttp(8080, "0.0.0.0").mountService(service, "/").start.map(Util.awaitServerShutdown).unsafeRunSync()
-  }
-
-  // NEW
-  val serverBuilder = BlazeServerBuilder[IO].bindHttp(8080, "localhost").withHttpApp(httpApp)
- */
-}
-
-object GraphQLEndpoints {
-  def endpoints(newsService: NewsService[IO]): HttpRoutes[IO] =
-    new GraphQLEndpoints[IO].graphQLEndpoint(newsService)
 }
