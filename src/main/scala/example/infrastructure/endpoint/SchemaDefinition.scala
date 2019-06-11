@@ -1,12 +1,12 @@
 package example.infrastructure.endpoint
 
+import cats.effect.IO
 import example.domain.News.{NewsItem, NewsService}
 import sangria.schema._
 
-class SchemaDefinition[F[_]](newsService: NewsService[F]) {
+object SchemaDefinition {
 
   // Might define with macros yet Scala 3
-  // TODO: change to repository dependency
   // TODO: auth; DELAY
   val news =
     List(
@@ -27,10 +27,15 @@ class SchemaDefinition[F[_]](newsService: NewsService[F]) {
       Field("link", StringType, resolve = _.value.link)
     ))
 
+  val LimitArg = Argument("limit", OptionInputType(IntType), defaultValue = 20)
+  val OffsetArg = Argument("offset", OptionInputType(IntType), defaultValue = 0)
+
   val SubscriptionType = ObjectType(
     "Subscription",
-    fields[Unit, Unit](
-      Field("news", ListType(NewsItemType), resolve = _ => news)
+    fields[NewsService[IO], Unit](
+      Field(
+        "news", ListType(NewsItemType),
+        resolve = ctx => ctx.ctx.list(ctx arg LimitArg, ctx arg OffsetArg).unsafeToFuture())
     ))
 
   val schema = Schema(SubscriptionType)

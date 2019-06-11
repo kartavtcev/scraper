@@ -30,7 +30,9 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % CirceVersion,
   //"org.specs2"      %% "specs2-core"         % Specs2Version % "test",
   "ch.qos.logback" % "logback-classic" % LogbackVersion,
-  "org.scalatest" %% "scalatest" % ScalaTestVersion % Test
+  "org.scalatest" %% "scalatest" % ScalaTestVersion % Test,
+
+  "io.circe" %% "circe-optics" % "0.9.3" // Http4sServer
 )
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % KindProjectorVersion cross CrossVersion.binary)
