@@ -1,4 +1,4 @@
 ## scraper
 
 
-![GraphQL UI](https://www.dropbox.com/s/gdpbu76swdzt54c/GraphQLQueryPicture.png)
+![GraphQL UI](https://imgur.com/a/YkVk69E)
