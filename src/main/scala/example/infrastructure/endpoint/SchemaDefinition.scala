@@ -35,6 +35,7 @@ object SchemaDefinition {
     fields[NewsService[IO], Unit](
       Field(
         "news", ListType(NewsItemType),
+        arguments = LimitArg :: OffsetArg :: Nil,
         resolve = ctx => ctx.ctx.list(ctx arg LimitArg, ctx arg OffsetArg).unsafeToFuture())
     ))
 
