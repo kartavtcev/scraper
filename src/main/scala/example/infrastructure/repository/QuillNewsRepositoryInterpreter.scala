@@ -42,12 +42,15 @@ class QuillNewsRepositoryInterpreter[F[_]](dbConfig: DatabaseConfig)(implicit F:
   private def selectAllLines(pageSize: Int, offset: Int): List[NewsItem] =
     ctx.run(schema.headlines).slice(offset, offset + pageSize)
 
+  // TODO: MUST fix FP reasoning mistake. Do not used F.pure. Used some effect/concurrent effect!
   def create(newsItem: NewsItem): F[Unit] =
     cs.shift *> F.pure(insert(newsItem))
 
+  // TODO: MUST fix FP reasoning mistake. Do not used F.pure. Used some effect/concurrent effect!
   def get(link: String): F[Option[NewsItem]] =
     cs.shift *> F.pure(selectOne(link))
 
+  // TODO: MUST fix FP reasoning mistake. Do not used F.pure. Used some effect/concurrent effect!
   def list(pageSize: Int, offset: Int): F[List[NewsItem]] =
     cs.shift *> F.pure(selectAllLines(pageSize, offset))
 }
