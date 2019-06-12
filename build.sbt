@@ -20,6 +20,9 @@ val ScalaTestVersion = "3.0.5"
 
 val KindProjectorVersion = "0.9.9"
 
+val H2Version = "1.4.199"
+val FlywayVersion = "5.2.4"
+
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % CatsVersion,
   "org.sangria-graphql" %% "sangria" % SangriaVersion,
@@ -34,8 +37,11 @@ libraryDependencies ++= Seq(
 
   //"org.specs2"      %% "specs2-core"         % Specs2Version % "test",
   "ch.qos.logback" % "logback-classic" % LogbackVersion,
-  "org.scalatest" %% "scalatest" % ScalaTestVersion % Test
 
+  "com.h2database" % "h2" % H2Version,
+  "org.flywaydb" % "flyway-core" % FlywayVersion,
+
+  "org.scalatest" %% "scalatest" % ScalaTestVersion % Test
 )
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % KindProjectorVersion cross CrossVersion.binary)
