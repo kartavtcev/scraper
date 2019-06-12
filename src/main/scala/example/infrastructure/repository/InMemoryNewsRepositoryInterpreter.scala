@@ -6,7 +6,7 @@ import example.domain.News.{NewsItem, NewsRepositoryAlgebra}
 
 import scala.collection.concurrent.TrieMap
 
-class NewsRepositoryInMemoryInterpreter[F[_]: Applicative] extends NewsRepositoryAlgebra[F] {
+class InMemoryNewsRepositoryInterpreter[F[_]: Applicative] extends NewsRepositoryAlgebra[F] {
   private val cache = new TrieMap[String, NewsItem]
 
   // test data setup:
@@ -30,6 +30,6 @@ class NewsRepositoryInMemoryInterpreter[F[_]: Applicative] extends NewsRepositor
     cache.values.toList.sortBy(_.title).slice(offset, offset + pageSize).pure[F]
 }
 
-object NewsRepositoryInMemoryInterpreter {
-  def apply[F[_]: Applicative]() = new NewsRepositoryInMemoryInterpreter[F]()
+object InMemoryNewsRepositoryInterpreter {
+  def apply[F[_]: Applicative]() = new InMemoryNewsRepositoryInterpreter[F]()
 }

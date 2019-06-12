@@ -2,7 +2,6 @@ package example.domain.News
 
 import cats.Functor
 import cats.data.EitherT
-//import cats.syntax.all._
 
 import example.domain.{AlreadyExistsError, NotFoundError}
 

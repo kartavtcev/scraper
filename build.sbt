@@ -22,6 +22,7 @@ val KindProjectorVersion = "0.9.9"
 
 val H2Version = "1.4.199"
 val FlywayVersion = "5.2.4"
+val QuillVersion = "3.2.0"
 
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % CatsVersion,
@@ -40,6 +41,7 @@ libraryDependencies ++= Seq(
 
   "com.h2database" % "h2" % H2Version,
   "org.flywaydb" % "flyway-core" % FlywayVersion,
+  "io.getquill" %% "quill-jdbc" % QuillVersion,
 
   "org.scalatest" %% "scalatest" % ScalaTestVersion % Test
 )
