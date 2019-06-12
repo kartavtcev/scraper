@@ -11,16 +11,13 @@ import io.circe.config.parser
 
 import scala.concurrent.ExecutionContext
 
-// Quill db repo
 // TODO: logging
-// ??? ConcurrentEffect: Timer
 
 object Server extends IOApp {
-  def createInfractructure[F[_]: ContextShift: ConcurrentEffect: Timer]: Resource[F, (NewsService[F], ServerConfig)] =
+  def createInfractructure[F[_]: ContextShift: Sync]: Resource[F, (NewsService[F], ServerConfig)] =
     for {
       conf <- Resource.liftF(parser.decodePathF[F, ApplicationConfigs]("application"))
 
-      //newsRepo = InMemoryNewsRepositoryInterpreter[F]()
       newsRepo = QuillNewsRepositoryInterpreter[F](conf.db)
       newsValidation = NewsValidationInterpreter[F](newsRepo)
       newsService = NewsService[F](newsRepo, newsValidation)

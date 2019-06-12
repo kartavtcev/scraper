@@ -11,7 +11,6 @@ val Http4sVersion = "0.20.1"
 val CirceVersion = "0.11.1"
 val CirceOpticsVersion = "0.9.3"
 val CirceConfigVersion = "0.6.1"
-//val Specs2Version = "4.1.0"
 val LogbackVersion = "1.2.3"
 
 val SangriaVersion = "1.4.2"
@@ -29,14 +28,12 @@ libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria" % SangriaVersion,
   "org.sangria-graphql" %% "sangria-circe" % SangriaCirceVersion,
   "org.http4s" %% "http4s-blaze-server" % Http4sVersion,
-  //"org.http4s"      %% "http4s-blaze-client" % Http4sVersion,
   "org.http4s" %% "http4s-circe" % Http4sVersion,
   "org.http4s" %% "http4s-dsl" % Http4sVersion,
   "io.circe" %% "circe-generic" % CirceVersion,
   "io.circe" %% "circe-config" % CirceConfigVersion,
   "io.circe" %% "circe-optics" % CirceOpticsVersion,
 
-  //"org.specs2"      %% "specs2-core"         % Specs2Version % "test",
   "ch.qos.logback" % "logback-classic" % LogbackVersion,
 
   "com.h2database" % "h2" % H2Version,
