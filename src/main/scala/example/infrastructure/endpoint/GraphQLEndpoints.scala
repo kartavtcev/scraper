@@ -1,19 +1,17 @@
 package example.infrastructure.endpoint
 
-import java.util.concurrent._
-
 import cats.data._
 import cats.effect.{ContextShift, IO}
 import cats.implicits._
+import example.domain.News.NewsService
 import io.circe.Json
 import io.circe.jawn._
 import io.circe.optics.JsonPath._
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.io._
-import org.http4s.server.Router
 import org.http4s.implicits._
-
+import org.http4s.server.Router
 import sangria.ast.Document
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
@@ -23,19 +21,13 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
-
-import example.domain.News.NewsService
-
 // TODO: Auth
 object GraphQLEndpoints {
-  // TODO: blocking # to config
-  val blockingEc = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(4))
-
-  def graphQLEndpoint(newsService: NewsService[IO])(implicit ec: ExecutionContext, cs: ContextShift[IO]) = {
+  def graphQLEndpoint(newsService: NewsService[IO], blockingCachedEc: ExecutionContext)(implicit ec: ExecutionContext, cs: ContextShift[IO]) = {
 
     def routes = HttpRoutes.of[IO] {
       case request @ GET -> Root ⇒ {
-        val route: OptionT[IO, Response[IO]] = StaticFile.fromResource("/assets/graphiql.html", blockingEc, Some(request))
+        val route: OptionT[IO, Response[IO]] = StaticFile.fromResource("/assets/graphiql.html", blockingCachedEc, Some(request))
         val result: IO[Response[IO]] = route.getOrElseF(NotFound())
         result
       }

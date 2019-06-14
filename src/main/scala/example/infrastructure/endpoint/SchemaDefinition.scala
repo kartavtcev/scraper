@@ -36,7 +36,7 @@ object SchemaDefinition {
       Field(
         "news", ListType(NewsItemType),
         arguments = LimitArg :: OffsetArg :: Nil,
-        resolve = ctx => ctx.ctx.list(ctx arg LimitArg, ctx arg OffsetArg).unsafeToFuture())
+        resolve = ctx => ctx.ctx.list(ctx arg LimitArg, ctx arg OffsetArg).unsafeToFuture())  // TODO: abstract to Effect?
     ))
 
   val schema = Schema(SubscriptionType)
