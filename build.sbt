@@ -23,6 +23,9 @@ val H2Version = "1.4.199"
 val FlywayVersion = "5.2.4"
 val QuillVersion = "3.2.0"
 
+val SttpVersion = "1.5.19"
+val ScalaScraperVersion = "2.1.0"
+
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % CatsVersion,
   "org.sangria-graphql" %% "sangria" % SangriaVersion,
@@ -33,13 +36,13 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % CirceVersion,
   "io.circe" %% "circe-config" % CirceConfigVersion,
   "io.circe" %% "circe-optics" % CirceOpticsVersion,
-
   "ch.qos.logback" % "logback-classic" % LogbackVersion,
-
   "com.h2database" % "h2" % H2Version,
   "org.flywaydb" % "flyway-core" % FlywayVersion,
   "io.getquill" %% "quill-jdbc" % QuillVersion,
-
+  "com.softwaremill.sttp" %% "core" % SttpVersion,
+  "com.softwaremill.sttp" %% "async-http-client-backend-cats" % SttpVersion,
+  "net.ruippeixotog" %% "scala-scraper" % ScalaScraperVersion,
   "org.scalatest" %% "scalatest" % ScalaTestVersion % Test
 )
 
