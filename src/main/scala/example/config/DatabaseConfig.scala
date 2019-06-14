@@ -4,7 +4,7 @@ import cats.effect.Sync
 import cats.syntax.functor._
 import org.flywaydb.core.Flyway
 
-case class DatabaseConfig(url: String, user: String, password: String, dataSourceClassName: String)
+final case class DatabaseConfig(url: String, user: String, password: String, dataSourceClassName: String)
 
 object DatabaseConfig {
   // Runs the flyway migrations against the target database
