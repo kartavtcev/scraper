@@ -1,7 +1,5 @@
 package example
 
-import java.util.concurrent.Executors
-
 import cats.effect._
 import cats.implicits._
 import example.config._

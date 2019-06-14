@@ -23,7 +23,9 @@ import scala.util.{Failure, Success}
 
 // TODO: Auth
 object GraphQLEndpoints {
-  def graphQLEndpoint(newsService: NewsService[IO], blockingCachedEc: ExecutionContext)(implicit ec: ExecutionContext, cs: ContextShift[IO]) = {
+  def graphQLEndpoint(newsService: NewsService[IO], blockingCachedEc: ExecutionContext)(
+      implicit ec: ExecutionContext,
+      cs: ContextShift[IO]) = {
 
     def routes = HttpRoutes.of[IO] {
       case request @ GET -> Root ⇒ {
