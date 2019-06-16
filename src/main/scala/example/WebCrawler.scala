@@ -21,10 +21,9 @@ object WebCrawler extends IOApp {
     (for {
       (newService, appConfs, blockingCachedEc) <- Infrastructure.create[IO]
 
-      content <- Resource.liftF(sttp.get(uri"https://www.wsj.com").send())
+      content <- Resource.liftF(sttp.get(uri"${appConfs.webcrawler.url}").send())
 
       _ = parseNews(content.body).map(_.foreach(newService.create(_)))
-
     } yield ()) //(ExitCode.Success)
       .use(_ => IO.unit)
       .as(ExitCode.Success)
