@@ -3,11 +3,6 @@ package example.domain.News
 import cats._
 import cats.data._
 
-/*
-import cats.syntax.functor._, cats.syntax.flatMap._
-*/
-
-
 import example.domain.{AlreadyExistsError, NotFoundError}
 
 // The entry point of domain, repos, validation
@@ -17,7 +12,6 @@ class NewsService[F[_]](
 )(implicit F: Monad[F]) {
 
   def create(newsItem: NewsItem): EitherT[F, AlreadyExistsError.type, Unit] =
-    //EitherT.liftF(repository.create(newsItem))
     for {
       _ <- validation.doesNotExist(newsItem)
       _ <- EitherT.liftF(repository.create(newsItem))
@@ -26,7 +20,7 @@ class NewsService[F[_]](
   def get(link: String): EitherT[F, NotFoundError.type, NewsItem] =
     EitherT.fromOptionF(repository.get(link), NotFoundError)
 
-  def list(pageSize: Int, offset: Int): F[List[NewsItem]] =   // TODO: may be EitherT with NonEmptyList
+  def list(pageSize: Int, offset: Int): F[List[NewsItem]] = // TODO: may be EitherT with NonEmptyList
     repository.list(pageSize, offset)
 }
 

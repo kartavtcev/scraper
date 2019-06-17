@@ -4,6 +4,7 @@ import cats._
 import example.domain.News._
 import org.scalatest._
 
+// In-memory repo is not used now. Just a test example.
 class InMemoryNewsRepositoryInterpreterTests extends FlatSpec with Matchers {
   "InMemoryRepo" should "correctly create, get and list elements." in {
 
@@ -24,5 +25,6 @@ class InMemoryNewsRepositoryInterpreterTests extends FlatSpec with Matchers {
 
     val result4: Id[List[NewsItem]] = repository.list(10,0)
     result4.length shouldEqual(1)
+    result4.headOption shouldEqual(Some(newsItem1))
   }
 }

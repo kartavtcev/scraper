@@ -3,8 +3,7 @@ package example.domain.News
 import cats.Applicative
 import cats.data.EitherT
 import cats.implicits._
-
-import example.domain.AlreadyExistsError
+import example.domain._
 
 class NewsValidationInterpreter[F[_]: Applicative](repository: NewsRepositoryAlgebra[F]) extends NewsValidationAlgebra[F] {
   def doesNotExist(news: NewsItem): EitherT[F, AlreadyExistsError.type, Unit] = EitherT { // Many layers of mtl would degrade performance.

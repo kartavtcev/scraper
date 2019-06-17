@@ -18,14 +18,13 @@ object Infrastructure {
       appConfs <- Resource.liftF(parser.decodePathF[F, ApplicationConfigs]("application"))
       blockingCachedEc <- blockingThreadPool[F]
 
-      //newsRepo = QuillNewsRepositoryInterpreter[F](appConfs.db, blockingCachedEc)
-      newsRepo = InMemoryNewsRepositoryInterpreter[F]()
+      newsRepo = QuillNewsRepositoryInterpreter[F](appConfs.db, blockingCachedEc)
       newsValidation = NewsValidationInterpreter[F](newsRepo)
       newsService = NewsService[F](newsRepo, newsValidation)
 
     } yield (newsService, appConfs, blockingCachedEc)
 
-  def blockingThreadPool[F[_]](implicit F: Sync[F]): Resource[F, ExecutionContext] =
+  private def blockingThreadPool[F[_]](implicit F: Sync[F]): Resource[F, ExecutionContext] =
     Resource(F.delay {
       val executor = Executors.newCachedThreadPool() // many short-lived asynchronous tasks
       val ec = ExecutionContext.fromExecutor(executor)

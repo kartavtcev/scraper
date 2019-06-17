@@ -23,13 +23,8 @@ class InMemoryNewsRepositoryInterpreter[F[_]: Monad] extends NewsRepositoryAlgeb
     ().pure[F]
   }
 
-  def get(link: String): F[Option[NewsItem]] = {
-    val t = cache.get(link)
-    //t.pure[F]
-    t.pure[F]
-    //F.pure(t)
-      //.pure[F] // also eq. findByLink
-  }
+  def get(link: String): F[Option[NewsItem]] =
+    cache.get(link).pure[F]
 
   def list(pageSize: Int, offset: Int): F[List[NewsItem]] =
     cache.values.toList.sortBy(_.title).slice(offset, offset + pageSize).pure[F]
