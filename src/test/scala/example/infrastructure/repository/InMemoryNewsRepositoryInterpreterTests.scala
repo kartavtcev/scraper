@@ -24,6 +24,5 @@ class InMemoryNewsRepositoryInterpreterTests extends FlatSpec with Matchers {
 
     val result4: Id[List[NewsItem]] = repository.list(10,0)
     result4.length shouldEqual(1)
-
   }
 }

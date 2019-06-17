@@ -26,7 +26,7 @@ class NewsService[F[_]](
   def get(link: String): EitherT[F, NotFoundError.type, NewsItem] =
     EitherT.fromOptionF(repository.get(link), NotFoundError)
 
-  def list(pageSize: Int, offset: Int): F[List[NewsItem]] =
+  def list(pageSize: Int, offset: Int): F[List[NewsItem]] =   // TODO: may be EitherT with NonEmptyList
     repository.list(pageSize, offset)
 }
 

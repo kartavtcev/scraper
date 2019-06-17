@@ -3,7 +3,6 @@ package example
 import cats.effect._
 import cats.implicits._
 import example.config._
-import example.domain.News.NewsItem
 import example.infrastructure._
 import example.infrastructure.endpoint._
 import org.http4s.server.blaze.BlazeServerBuilder
@@ -17,14 +16,14 @@ object GraphQLServer extends IOApp {
     implicit val ec = ExecutionContext.global
 
     (for {
-      (newService, appConfs, blockingCachedEc) <- Infrastructure.create[IO]
+      (newsService, appConfs, blockingCachedEc) <- Infrastructure.create[IO]
       _ <- Resource.liftF(DatabaseConfig.initializeDb(appConfs.db)(Sync[IO]))
 
-      _ = newService.create(NewsItem("1", "one"))
+      //_ = newsService.create(NewsItem("1", "one"))
 
       server <- BlazeServerBuilder[IO]
         .bindHttp(appConfs.server.port, appConfs.server.host)
-        .withHttpApp(GraphQLEndpoints.graphQLEndpoint(newService, blockingCachedEc))
+        .withHttpApp(GraphQLEndpoints.graphQLEndpoint(newsService, blockingCachedEc))
         .resource
     } yield server)
       .use(_ => IO.never)
