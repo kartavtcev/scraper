@@ -19,6 +19,7 @@ object Infrastructure {
       blockingCachedEc <- blockingThreadPool[F]
 
       newsRepo = QuillNewsRepositoryInterpreter[F](appConfs.db, blockingCachedEc)
+      //newsRepo = InMemoryNewsRepositoryInterpreter[F]()
       newsValidation = NewsValidationInterpreter[F](newsRepo)
       newsService = NewsService[F](newsRepo, newsValidation)
 
