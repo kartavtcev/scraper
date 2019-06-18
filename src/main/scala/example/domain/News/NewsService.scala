@@ -13,14 +13,14 @@ class NewsService[F[_]](
 
   def create(newsItem: NewsItem): EitherT[F, AlreadyExistsError.type, Unit] =
     for {
-      _ <- validation.doesNotExist(newsItem)
+      _ <- validation.doesNotExist(newsItem) // TODO: update title for existing link
       _ <- EitherT.liftF(repository.create(newsItem))
     } yield ()
 
   def get(link: String): EitherT[F, NotFoundError.type, NewsItem] =
     EitherT.fromOptionF(repository.get(link), NotFoundError)
 
-  def list(pageSize: Int, offset: Int): F[List[NewsItem]] = // TODO: may be EitherT with NonEmptyList
+  def list(pageSize: Int, offset: Int): F[List[NewsItem]] = // TODO: could be EitherT with NonEmptyList
     repository.list(pageSize, offset)
 }
 

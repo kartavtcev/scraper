@@ -30,8 +30,7 @@ object GraphQLEndpoints {
     def routes = HttpRoutes.of[IO] {
       case request @ GET -> Root ⇒ {
         val route: OptionT[IO, Response[IO]] = StaticFile.fromResource("/assets/graphiql.html", blockingCachedEc, Some(request))
-        val result: IO[Response[IO]] = route.getOrElseF(NotFound())
-        result
+        route.getOrElseF(NotFound())
       }
 
       case request @ POST -> Root / "graphql" ⇒

@@ -8,17 +8,6 @@ object SchemaDefinition {
 
   // Might define with macros yet Scala 3 ...
   // TODO: auth
-  val news =
-    List(
-      NewsItem(
-        "Acting Budget Chief Seeks Reprieve on Huawei Ban",
-        "https://www.wsj.com/articles/acting-budget-chief-seeks-reprieve-on-huawei-ban-11560108418"
-      ),
-      NewsItem(
-        "Rewrite of Bank Rules Makes Little Progress, Frustrating Republicans",
-        "https://www.wsj.com/articles/rewrite-of-bank-rules-bogs-down-11560159001"
-      )
-    )
 
   val NewsItemType = ObjectType(
     "NewsItem",
@@ -36,7 +25,7 @@ object SchemaDefinition {
       Field(
         "news", ListType(NewsItemType),
         arguments = LimitArg :: OffsetArg :: Nil,
-        resolve = ctx => ctx.ctx.list(ctx arg LimitArg, ctx arg OffsetArg).unsafeToFuture())  // TODO: abstract to Effect?
+        resolve = ctx => ctx.ctx.list(ctx arg LimitArg, ctx arg OffsetArg).unsafeToFuture())  // TODO: refactor to Effect?
     ))
 
   val schema = Schema(SubscriptionType)
