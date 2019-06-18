@@ -31,9 +31,8 @@ object WebCrawler extends IOApp {
             }
           }
       }
-      .handleErrorWith(_ => IO.unit)  // TODO: handle & log errors.
+      .handleErrorWith(_ => IO.unit) // TODO: handle & log errors.
       .as(ExitCode.Success)
-
     // TODO: stop & exit.
   }
 
