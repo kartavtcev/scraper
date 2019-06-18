@@ -3,8 +3,8 @@
 Web Crawler + GraphQL FP demo.    
 Some code is based on official Cats Effect demo, Sangria demos.   
 
-Start GraphQLServer for GraphQL.  
-Start WebCrawler to scrape the page (set up in config).  
+First, start GraphQLServer for GraphQL (it'll init the DB and the table).
+Then, start WebCrawler to scrape the page (set up in config).  
 
 Example GraphQL query:
 ```
@@ -19,4 +19,6 @@ Example GraphQL query:
 Libs used: Sangria, Http4s, Sttp, Cats/Cats Effect, Scala-scraper, Quill.
 Tagless Final approach.  
 
-TODO: logging, error handling, auth, more tests, docker.
+TODO:
+1. Auto-stop WebCrawler IOApp.
+2. Logging, error handling, auth, more tests, docker.

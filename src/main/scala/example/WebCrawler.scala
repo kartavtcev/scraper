@@ -4,12 +4,8 @@ import cats.effect._
 import cats.implicits._
 import com.softwaremill.sttp._
 import com.softwaremill.sttp.asynchttpclient.cats.AsyncHttpClientCatsBackend
-import example.domain.News._
+import example.parser.ScraperParser
 import example.infrastructure.Infrastructure
-import net.ruippeixotog.scalascraper.browser.JsoupBrowser
-import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
-import net.ruippeixotog.scalascraper.dsl.DSL._
-import net.ruippeixotog.scalascraper.model._
 
 import scala.concurrent.ExecutionContext
 
@@ -23,7 +19,7 @@ object WebCrawler extends IOApp {
       .use {
         case (newService, appConfs, blockingCachedEc) =>
           (sttp.get(uri"${appConfs.webcrawler.url}").send() >>= { content =>
-            parseNews(appConfs.webcrawler.scrapeClass, content.body) match {
+            ScraperParser.parseNews(appConfs.webcrawler.scrapeClass, content.body) match {
               case Left(error) => // TODO: log error
                 IO.unit
               case Right(list) =>
@@ -35,16 +31,4 @@ object WebCrawler extends IOApp {
       .as(ExitCode.Success)
     // TODO: stop & exit.
   }
-
-  // TODO: refactor to separate class / object + unit-test.
-  def parseNews(scrapeClass: String, content: Either[String, String]): Either[String, List[NewsItem]] =
-    content.map(text => {
-
-      val browser = JsoupBrowser()
-      val doc = browser.parseString(text)
-      val items: List[Element] = doc >> elementList(scrapeClass)
-      val news = items.map(item => NewsItem(item.text, item >> attr("href")))
-
-      news
-    })
 }
