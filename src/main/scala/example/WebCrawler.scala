@@ -18,24 +18,26 @@ object WebCrawler extends IOApp {
     implicit val ec = ExecutionContext.global
     implicit val sttpBackend = AsyncHttpClientCatsBackend[cats.effect.IO]()
 
-    (for {
-      (newService, appConfs, blockingCachedEc) <- Infrastructure.create[IO]
-
-      content <- Resource.liftF(sttp.get(uri"${appConfs.webcrawler.url}").send())
-
-      _ <- Resource.liftF(parseNews(appConfs.webcrawler.scrapeClass, content.body) match {
-        case Left(error) => // TODO: log error
-          IO.unit
-        case Right(list) =>
-          list.traverse(newService.create(_).value)
-      })
-    } yield ())
-      .use(_ => IO.unit)
+    Infrastructure
+      .create[IO]
+      .use {
+        case (newService, appConfs, blockingCachedEc) =>
+          sttp.get(uri"${appConfs.webcrawler.url}").send() >>= { content =>
+            parseNews(appConfs.webcrawler.scrapeClass, content.body) match {
+              case Left(error) => // TODO: log error
+                IO.unit
+              case Right(list) =>
+                list.traverse(newService.create(_).value)
+            }
+          }
+      }
+      .handleErrorWith(_ => IO.unit)  // TODO: handle & log errors.
       .as(ExitCode.Success)
+
     // TODO: stop & exit.
   }
 
-  def parseNews(scrapeClass: String, content: Either[String, String]): Either[String, List[NewsItem]] = {
+  def parseNews(scrapeClass: String, content: Either[String, String]): Either[String, List[NewsItem]] =
     content.map(text => {
 
       val browser = JsoupBrowser()
@@ -45,5 +47,4 @@ object WebCrawler extends IOApp {
 
       news
     })
-  }
 }
