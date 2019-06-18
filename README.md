@@ -3,9 +3,6 @@
 Web Crawler + GraphQL FP demo.    
 Some code is based on official Cats Effect demo, Sangria demos.   
 
-
-How to run:  
-Install & start H2 database in `Generic H2 (Server)` mode.  
 Start GraphQLServer for GraphQL.  
 Start WebCrawler to scrape the page (set up in config).  
 

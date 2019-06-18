@@ -22,20 +22,21 @@ object WebCrawler extends IOApp {
       .create[IO]
       .use {
         case (newService, appConfs, blockingCachedEc) =>
-          sttp.get(uri"${appConfs.webcrawler.url}").send() >>= { content =>
+          (sttp.get(uri"${appConfs.webcrawler.url}").send() >>= { content =>
             parseNews(appConfs.webcrawler.scrapeClass, content.body) match {
               case Left(error) => // TODO: log error
                 IO.unit
               case Right(list) =>
                 list.traverse(newService.create(_).value)
             }
-          }
+          })
       }
-      .handleErrorWith(_ => IO.unit) // TODO: handle & log errors.
+      //.handleErrorWith(_ => IO.unit) // TODO: handle & log errors.
       .as(ExitCode.Success)
     // TODO: stop & exit.
   }
 
+  // TODO: refactor to separate class / object + unit-test.
   def parseNews(scrapeClass: String, content: Either[String, String]): Either[String, List[NewsItem]] =
     content.map(text => {
 
