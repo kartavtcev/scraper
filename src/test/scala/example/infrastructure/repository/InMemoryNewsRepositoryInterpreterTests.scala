@@ -5,6 +5,7 @@ import example.domain.News._
 import org.scalatest._
 
 // In-memory repo is not used now. Just a test example.
+// TODO: use it for tests. Service with a validation.
 class InMemoryNewsRepositoryInterpreterTests extends FlatSpec with Matchers {
   "InMemoryRepo" should "correctly create, get and list elements." in {
 

@@ -11,7 +11,7 @@ import io.circe.config.parser
 import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
 
-// TODO: refactor this infrastructure to service in SOA architecture; API calls based access.
+// TODO: could refactor this infrastructure to service in SOA architecture; API calls based access.
 object Infrastructure {
   def create[F[_]: ContextShift: Sync]: Resource[F, (NewsService[F], ApplicationConfigs, ExecutionContext)] =
     for {
@@ -19,7 +19,6 @@ object Infrastructure {
       blockingCachedEc <- blockingThreadPool[F]
 
       newsRepo = QuillNewsRepositoryInterpreter[F](appConfs.db, blockingCachedEc)
-      //newsRepo = InMemoryNewsRepositoryInterpreter[F]()
       newsValidation = NewsValidationInterpreter[F](newsRepo)
       newsService = NewsService[F](newsRepo, newsValidation)
 
