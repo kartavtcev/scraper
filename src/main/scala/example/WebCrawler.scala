@@ -18,17 +18,17 @@ object WebCrawler extends IOApp {
       .create[IO]
       .use {
         case (newService, appConfs, blockingCachedEc) =>
-          (sttp.get(uri"${appConfs.webcrawler.url}").send() >>= { content =>
+          sttp.get(uri"${appConfs.webcrawler.url}").send() >>= { content =>
             ScraperParser.parseNews(appConfs.webcrawler.scrapeClass, content.body) match {
               case Left(error) => // TODO: log error
                 IO.unit
               case Right(list) =>
                 list.traverse(newService.create(_).value)
             }
-          })
+          }
       }
       //.handleErrorWith(_ => IO.unit) // TODO: handle & log errors.
+      .map(_ => sttpBackend.close()) // Manually close sttp "at the end of the world" to stop the program.
       .as(ExitCode.Success)
-    // TODO: stop & exit.
   }
 }

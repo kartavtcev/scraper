@@ -24,6 +24,7 @@ class QuillNewsRepositoryInterpreter[F[_]](dbConfig: DatabaseConfig, blockingCac
   lazy val ctx = new H2JdbcContext(SnakeCase, config)
   import ctx._
 
+  // TODO: ORDER BY link or title for pagination
   object schema {
     val headlines = quote {
       querySchema[NewsItem](

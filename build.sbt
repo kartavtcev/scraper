@@ -23,7 +23,7 @@ val H2Version = "1.4.199"
 val FlywayVersion = "5.2.4"
 val QuillVersion = "3.2.0"
 
-val SttpVersion = "1.5.19"
+val SttpVersion = "1.6.0"
 val ScalaScraperVersion = "2.1.0"
 
 libraryDependencies ++= Seq(

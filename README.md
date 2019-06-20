@@ -20,5 +20,4 @@ Libs used: Sangria, Http4s, Sttp, Cats/Cats Effect, Scala-scraper, Quill.
 Tagless Final approach.  
 
 TODO:
-1. Auto-stop WebCrawler IOApp.
-2. Logging, error handling, auth, more tests, docker.
+Logging, error handling, auth, more tests, docker.
