@@ -14,21 +14,22 @@ object WebCrawler extends IOApp {
     implicit val ec = ExecutionContext.global
     implicit val sttpBackend = AsyncHttpClientCatsBackend[cats.effect.IO]()
 
-    Infrastructure
-      .create[IO]
-      .use {
-        case (newService, appConfs, blockingCachedEc) =>
-          sttp.get(uri"${appConfs.webcrawler.url}").send() >>= { content =>
-            ScraperParser.parseNews(appConfs.webcrawler.scrapeClass, content.body) match {
-              case Left(error) => // TODO: log error
-                IO.unit
-              case Right(list) =>
-                list.traverse(newService.create(_).value)
-            }
-          }
-      }
-      //.handleErrorWith(_ => IO.unit) // TODO: handle & log errors.
-      .map(_ => sttpBackend.close()) // Manually close sttp "at the end of the world" to stop the program.
+    (for {
+      (newsService, appConfs, blockingCachedEc) <- Infrastructure.create[IO]
+      call <- Resource(IO.delay {
+        (sttp.get(uri"${appConfs.webcrawler.url}").send(), IO.delay(sttpBackend.close()))
+      })
+      _ <- Resource.liftF(call >>= { content =>
+        ScraperParser.parseNews(appConfs.webcrawler.scrapeClass, content.body) match {
+          case Left(error) => // TODO: log error
+            IO.unit
+          case Right(list) =>
+            list.traverse(newsService.create(_).value)
+        }
+      })
+    } yield ())
+      .use(_ => IO.unit)
+      //.handleErrorWith(_ => IO.unit)  // TODO: handle & log errors.
       .as(ExitCode.Success)
   }
 }
